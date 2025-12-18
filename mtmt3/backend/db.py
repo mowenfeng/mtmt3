@@ -1,0 +1,44 @@
+from datetime import datetime
+from sqlalchemy import (
+    create_engine, Column, String, DateTime, Float, Text
+)
+from sqlalchemy.orm import declarative_base, sessionmaker
+from .config import DATABASE_URL
+
+engine = create_engine(
+    DATABASE_URL,
+    connect_args={"check_same_thread": False}
+)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+Base = declarative_base()
+
+class Task(Base):
+    __tablename__ = "tasks"
+
+    id = Column(String, primary_key=True, index=True)
+    status = Column(String, default="queued", index=True)   # queued / processing / done / failed
+    progress = Column(Float, default=0.0)
+
+    model = Column(String, default="mtmt3_piano_vocal")
+    mode = Column(String, default="with_accompaniment")
+    quantization = Column(String, default="none")
+
+    input_path = Column(String)
+    midi_path = Column(String, nullable=True)
+    musicxml_path = Column(String, nullable=True)
+
+    duration = Column(Float, nullable=True)
+    note_count = Column(Float, nullable=True)
+
+    error_message = Column(Text, nullable=True)
+
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow)
+
+    def touch(self):
+        self.updated_at = datetime.utcnow()
+
+
+def init_db():
+    Base.metadata.create_all(bind=engine)

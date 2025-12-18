@@ -1,0 +1,22 @@
+# Created by pytest automatically.
+# python
+# python
+__pycache__/
+*.pyc
+
+# venv
+.venv/
+
+# pytest
+.pytest_cache/
+
+# local db / runtime files
+*.sqlite3
+backend/db.sqlite3
+backend/data/
+backend/uploads/
+backend/results/
+
+# OS
+.DS_Store
+Thumbs.db
