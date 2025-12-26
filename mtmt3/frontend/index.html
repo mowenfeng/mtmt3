@@ -3,120 +3,707 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<html lang="zh-CN">
-<head>
-  <title>在线转谱 Demo</title>
+  <title>音乐转谱 - 从听见到演奏，只有一个AI的距离</title>
   <style>
-    body { font-family: sans-serif; max-width: 600px; margin: 40px auto; }
-    .row { margin-bottom: 12px; }
-    #log { white-space: pre-wrap; background: #f5f5f5; padding: 8px; min-height: 80px; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: #333;
+      line-height: 1.6;
+      background: #fff;
+    }
+
+    /* 导航栏 */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      padding: 0 5%;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #6366f1;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #333;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #6366f1;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .btn-login {
+      padding: 8px 20px;
+      background: transparent;
+      border: 1px solid #6366f1;
+      color: #6366f1;
+      border-radius: 20px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .btn-login:hover {
+      background: #6366f1;
+      color: white;
+    }
+
+    /* 英雄区域 */
+    .hero {
+      margin-top: 70px;
+      padding: 100px 5% 80px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+
+    .hero p {
+      font-size: 24px;
+      margin-bottom: 40px;
+      opacity: 0.95;
+    }
+
+    /* 功能卡片区域 */
+    .features {
+      padding: 80px 5%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      margin-top: 50px;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 12px;
+      padding: 40px 30px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .feature-card.active {
+      border: 2px solid #6366f1;
+    }
+
+    .feature-icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .feature-card h3 {
+      font-size: 22px;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .feature-card p {
+      color: #666;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .feature-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: #f0f9ff;
+      color: #6366f1;
+      border-radius: 12px;
+      font-size: 12px;
+      margin-top: 15px;
+    }
+
+    /* 转谱功能区域 */
+    .transcription-section {
+      padding: 80px 5%;
+      background: #f8fafc;
+      min-height: 600px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      padding: 50px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 50px;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #333;
+      font-size: 15px;
+    }
+
+    .form-group input[type="file"],
+    .form-group select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input[type="file"]:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #6366f1;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .status-panel {
+      margin-top: 30px;
+      padding: 25px;
+      background: #f8fafc;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .status-panel.active {
+      display: block;
+    }
+
+    .status-item {
+      margin-bottom: 15px;
+      font-size: 15px;
+    }
+
+    .status-item strong {
+      color: #6366f1;
+      margin-right: 10px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #e5e7eb;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 15px 0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    .download-links {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .download-links a {
+      display: inline-block;
+      margin-right: 15px;
+      padding: 10px 20px;
+      background: #6366f1;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background 0.3s;
+    }
+
+    .download-links a:hover {
+      background: #4f46e5;
+    }
+
+    .log {
+      margin-top: 20px;
+      padding: 15px;
+      background: #1f2937;
+      color: #10b981;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      max-height: 200px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      display: none;
+    }
+
+    .log.active {
+      display: block;
+    }
+
+    /* 会员权益区域 */
+    .membership {
+      padding: 80px 5%;
+      background: white;
+    }
+
+    .membership-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 50px auto 0;
+    }
+
+    .membership-card {
+      border: 2px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 40px 30px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .membership-card:hover {
+      border-color: #6366f1;
+      transform: translateY(-5px);
+    }
+
+    .membership-card h3 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .membership-price {
+      font-size: 36px;
+      font-weight: bold;
+      color: #6366f1;
+      margin: 20px 0;
+    }
+
+    .membership-features {
+      list-style: none;
+      text-align: left;
+      margin: 30px 0;
+    }
+
+    .membership-features li {
+      padding: 10px 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .membership-features li:before {
+      content: "✓ ";
+      color: #10b981;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    /* 页脚 */
+    .footer {
+      background: #1f2937;
+      color: white;
+      padding: 50px 5%;
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: #9ca3af;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: white;
+    }
+
+    .footer-copyright {
+      margin-top: 30px;
+      padding-top: 30px;
+      border-top: 1px solid #374151;
+      color: #9ca3af;
+      font-size: 14px;
+    }
+
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .hero p {
+        font-size: 18px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        padding: 30px 20px;
+      }
+
+      .membership-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>在线转谱 Demo</h1>
+  <!-- 导航栏 -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="#" class="logo">音乐转谱</a>
+      <ul class="nav-links">
+        <li><a href="#home">首页</a></li>
+        <li><a href="#features">功能产品</a></li>
+        <li><a href="#transcription">转谱</a></li>
+        <li><a href="#membership">会员</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="#" class="btn-login">登录</a>
+      </div>
+    </div>
+  </nav>
 
-  <div class="row">
-    <input type="file" id="fileInput" title="请选择音频文件" placeholder="请选择音频文件" />
-  </div>
+  <!-- 英雄区域 -->
+  <section class="hero" id="home">
+    <h1>从听见到演奏，只有一个AI的距离</h1>
+    <p>将音乐转录为五线谱与简谱，让音乐创作更简单</p>
+  </section>
 
-  <div class="row">
-    <label>模型：</label>
-    <select id="model" title="选择模型"></select>
-      <option value="mtmt3_piano_vocal">钢琴 + 人声</option>
-      <option value="mtmt3_multi">多乐器</option>
-    </select>
-  </div>
+  <!-- 功能展示区域 -->
+  <section class="features" id="features">
+    <h2 class="section-title">核心功能</h2>
+    <div class="features-grid">
+      <div class="feature-card" onclick="scrollToSection('transcription')" role="button" tabindex="0" onkeypress="if(event.key==='Enter') scrollToSection('transcription')">
+        <div class="feature-icon">🎵</div>
+        <h3>音乐转谱</h3>
+        <p>将音乐转录为五线谱与简谱</p>
+        <span class="feature-badge">最多人的选择</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📄</div>
+        <h3>图文识谱</h3>
+        <p>识别五线谱图片/PDF文件</p>
+        <span class="feature-badge">最新功能推荐</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎤</div>
+        <h3>人声分离</h3>
+        <p>将音乐分离成人声与伴奏</p>
+        <span class="feature-badge">热门功能推荐</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎹</div>
+        <h3>曲谱转换</h3>
+        <p>将 MIDI 转换为五线谱与简谱</p>
+        <span class="feature-badge">亮点功能推荐</span>
+      </div>
+    </div>
+  </section>
 
-  <div class="row">
-    <label>音乐形式：</label>
-    <select id="mode" title="选择音乐形式"></select>
-      <option value="with_accompaniment">带伴奏演唱</option>
-      <option value="a_cappella">无伴奏清唱</option>
-      <option value="instrumental">纯乐器演奏</option>
-    </select>
-  </div>
+  <!-- 转谱功能区域 -->
+  <section class="transcription-section" id="transcription">
+    <div class="container">
+      <h2 class="section-title">音乐转谱</h2>
+      
+      <div class="form-group">
+        <label for="fileInput">选择音频文件</label>
+        <input type="file" id="fileInput" accept="audio/*" />
+      </div>
 
-  <div class="row">
-    <label>量化：</label>
-    <select id="quantization" title="选择量化精度"></select>
-      <option value="none">无</option>
-      <option value="1/4">1/4</option>
-      <option value="1/8">1/8</option>
-      <option value="1/16">1/16</option>
-    </select>
-  </div>
+      <div class="form-group">
+        <label for="model">模型</label>
+        <select id="model">
+          <option value="mtmt3_piano_vocal">钢琴 + 人声</option>
+          <option value="mtmt3_multi">多乐器</option>
+        </select>
+      </div>
 
-  <div class="row">
-    <button id="uploadBtn">上传并转谱</button>
-  </div>
+      <div class="form-group">
+        <label for="mode">音乐形式</label>
+        <select id="mode">
+          <option value="with_accompaniment">带伴奏演唱</option>
+          <option value="a_cappella">无伴奏清唱</option>
+          <option value="instrumental">纯乐器演奏</option>
+        </select>
+      </div>
 
-  <div class="row">
-    <div>当前 Task ID: <span id="taskId"></span></div>
-    <div>状态: <span id="status"></span></div>
-    <div>进度: <span id="progress"></span></div>
-    <div id="downloadLinks"></div>
-  </div>
+      <div class="form-group">
+        <label for="quantization">量化精度</label>
+        <select id="quantization">
+          <option value="none">无</option>
+          <option value="1/4">1/4</option>
+          <option value="1/8">1/8</option>
+          <option value="1/16">1/16</option>
+        </select>
+      </div>
 
-  <div id="log"></div>
+      <button class="btn-primary" id="uploadBtn">上传并转谱</button>
 
-<script>
-const API_BASE = "http://127.0.0.1:8000";
+      <div class="status-panel" id="statusPanel">
+        <div class="status-item">
+          <strong>任务ID:</strong> <span id="taskId">-</span>
+        </div>
+        <div class="status-item">
+          <strong>状态:</strong> <span id="status">-</span>
+        </div>
+        <div class="status-item">
+          <strong>进度:</strong> <span id="progress">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="download-links" id="downloadLinks"></div>
+      </div>
 
-const $ = (id) => document.getElementById(id);
+      <div class="log" id="log"></div>
+    </div>
+  </section>
 
-function log(msg) {
-  $("log").textContent += msg + "\n";
-}
+  <!-- 会员权益区域 -->
+  <section class="membership" id="membership">
+    <h2 class="section-title">会员权益</h2>
+    <div class="membership-grid">
+      <div class="membership-card">
+        <h3>音乐生</h3>
+        <div class="membership-price">永久免费</div>
+        <ul class="membership-features">
+          <li>每日签到送 2 音符</li>
+          <li>音乐转谱/人声分离/曲谱转换</li>
+          <li>在线预览/下载</li>
+          <li>支持 20MB 音乐</li>
+          <li>支持 10 分钟音乐</li>
+          <li>数据保存三天</li>
+          <li>单个上传处理</li>
+        </ul>
+      </div>
+      <div class="membership-card">
+        <h3>会员 VIP</h3>
+        <div class="membership-price">¥ 0</div>
+        <p style="color: #666; margin-bottom: 20px;">您可以通过开通会员来获取更多权益</p>
+        <ul class="membership-features">
+          <li>更多处理次数</li>
+          <li>更大文件支持</li>
+          <li>更长音频处理</li>
+          <li>数据永久保存</li>
+          <li>批量上传处理</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
-$("uploadBtn").onclick = async () => {
-  const file = $("fileInput").files[0];
-  if (!file) {
-    alert("先选个音频文件");
-    return;
-  }
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="#">功能地图</a>
+      <a href="#">规则条款</a>
+      <a href="#">隐私政策</a>
+      <a href="#">关于我们</a>
+      <a href="#">商务合作</a>
+      <a href="#">意见反馈</a>
+    </div>
+    <div class="footer-copyright">
+      <p>© 2024 音乐转谱平台 | 让音乐创作更简单</p>
+    </div>
+  </footer>
 
-  const form = new FormData();
-  form.append("file", file);
-  form.append("model", $("model").value);
-  form.append("mode", $("mode").value);
-  form.append("quantization", $("quantization").value);
+  <script>
+    const API_BASE = "http://127.0.0.1:8000";
 
-  log("上传中...");
+    const $ = (id) => document.getElementById(id);
 
-  const resp = await fetch(API_BASE + "/api/tasks", {
-    method: "POST",
-    body: form,
-  });
-
-  const data = await resp.json();
-  log("创建任务: " + JSON.stringify(data));
-
-  $("taskId").textContent = data.task_id;
-  pollStatus(data.task_id);
-};
-
-async function pollStatus(taskId) {
-  async function tick() {
-    const resp = await fetch(API_BASE + "/api/tasks/" + taskId);
-    const data = await resp.json();
-    $("status").textContent = data.status;
-    $("progress").textContent = (data.progress * 100).toFixed(0) + "%";
-
-    if (data.status === "done" && data.result) {
-      const d = data.result;
-      $("downloadLinks").innerHTML =
-        `<a href="${API_BASE + d.midi_url}" target="_blank">下载 MIDI</a> | ` +
-        `<a href="${API_BASE + d.musicxml_url}" target="_blank">下载 MusicXML</a>`;
-      log("任务完成");
-    } else if (data.status === "failed") {
-      log("任务失败: " + data.error_message);
-    } else {
-      setTimeout(tick, 3000);
+    function log(msg) {
+      const logEl = $("log");
+      logEl.classList.add("active");
+      logEl.textContent += msg + "\n";
+      logEl.scrollTop = logEl.scrollHeight;
     }
-  }
-  tick();
-}
-</script>
 
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    $("uploadBtn").onclick = async () => {
+      const file = $("fileInput").files[0];
+      if (!file) {
+        alert("请先选择音频文件");
+        return;
+      }
+
+      const form = new FormData();
+      form.append("file", file);
+      form.append("model", $("model").value);
+      form.append("mode", $("mode").value);
+      form.append("quantization", $("quantization").value);
+
+      log("上传中...");
+      $("statusPanel").classList.add("active");
+      $("status").textContent = "上传中...";
+      $("progress").textContent = "0%";
+      $("progressFill").style.width = "0%";
+      $("downloadLinks").innerHTML = "";
+
+      try {
+        const resp = await fetch(API_BASE + "/api/tasks", {
+          method: "POST",
+          body: form,
+        });
+
+        const data = await resp.json();
+        log("创建任务: " + JSON.stringify(data));
+
+        $("taskId").textContent = data.task_id;
+        $("status").textContent = "处理中...";
+        pollStatus(data.task_id);
+      } catch (error) {
+        log("错误: " + error.message);
+        $("status").textContent = "失败";
+      }
+    };
+
+    async function pollStatus(taskId) {
+      let pollInterval = 5000; // 初始轮询间隔5秒
+      let consecutiveErrors = 0;
+      
+      async function tick() {
+        try {
+          const resp = await fetch(API_BASE + "/api/tasks/" + taskId);
+          const data = await resp.json();
+          
+          consecutiveErrors = 0; // 重置错误计数
+          pollInterval = 5000; // 重置为默认间隔
+          
+          $("status").textContent = data.status === "done" ? "完成" : 
+                                   data.status === "failed" ? "失败" : "处理中...";
+          
+          const progress = (data.progress * 100).toFixed(0);
+          $("progress").textContent = progress + "%";
+          $("progressFill").style.width = progress + "%";
+
+          if (data.status === "done" && data.result) {
+            const d = data.result;
+            $("downloadLinks").innerHTML =
+              `<a href="${API_BASE + d.midi_url}" target="_blank">下载 MIDI</a>` +
+              `<a href="${API_BASE + d.musicxml_url}" target="_blank">下载 MusicXML</a>`;
+            log("任务完成！");
+          } else if (data.status === "failed") {
+            log("任务失败: " + (data.error_message || "未知错误"));
+          } else {
+            // 如果处理时间较长，逐渐增加轮询间隔（最多10秒）
+            setTimeout(tick, pollInterval);
+            pollInterval = Math.min(pollInterval + 1000, 10000);
+          }
+        } catch (error) {
+          consecutiveErrors++;
+          log("轮询错误: " + error.message);
+          // 如果连续出错，增加轮询间隔
+          if (consecutiveErrors > 3) {
+            pollInterval = Math.min(pollInterval * 1.5, 15000);
+          }
+          setTimeout(tick, pollInterval);
+        }
+      }
+      tick();
+    }
+
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
 </body>
 </html>

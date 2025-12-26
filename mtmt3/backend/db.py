@@ -3,11 +3,19 @@ from sqlalchemy import (
     create_engine, Column, String, DateTime, Float, Text
 )
 from sqlalchemy.orm import declarative_base, sessionmaker
-from .config import DATABASE_URL
+
+try:
+    from .config import DATABASE_URL
+except ImportError:
+    from backend.config import DATABASE_URL
 
 engine = create_engine(
     DATABASE_URL,
-    connect_args={"check_same_thread": False}
+    connect_args={"check_same_thread": False},
+    pool_size=20,  # 增加连接池大小
+    max_overflow=40,  # 允许的额外连接数
+    pool_timeout=30,  # 连接超时时间
+    pool_recycle=3600,  # 连接回收时间（秒）
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
