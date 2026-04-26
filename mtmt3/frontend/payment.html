@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>支付中心 - 音脉 Studio</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #1677ff;
+      --primary-dark: #0958d9;
+      --ok: #16a34a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(1080px, 92%);
+      margin: 32px auto 56px;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 22px;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 14px;
+    }
+
+    .section {
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+      border-bottom: 1px dashed var(--line);
+    }
+
+    .section:last-child {
+      margin-bottom: 0;
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .item .k {
+      color: var(--muted);
+    }
+
+    .price {
+      font-size: 34px;
+      font-weight: 700;
+      color: #cf1322;
+      line-height: 1.1;
+      margin: 4px 0 8px;
+    }
+
+    .price small {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+      margin-left: 4px;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 12px;
+      background: #e8f3ff;
+      color: #0c63e7;
+      border-radius: 999px;
+      padding: 4px 10px;
+      margin-right: 6px;
+      margin-top: 4px;
+    }
+
+    .pay-methods {
+      display: grid;
+      gap: 10px;
+    }
+
+    .method {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .method.active {
+      border-color: var(--primary);
+      background: #f0f7ff;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--ok);
+      box-shadow: 0 0 0 4px #dcfce7;
+    }
+
+    .btn {
+      width: 100%;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      min-height: 46px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 14px;
+    }
+
+    .btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .agree {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    .agree a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .notice {
+      margin-top: 14px;
+      background: #f9fafb;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 13px;
+      color: #374151;
+    }
+
+    .notice ul {
+      margin-left: 18px;
+    }
+
+    .notice li {
+      margin: 4px 0;
+    }
+
+    .ok {
+      margin-top: 14px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #ecfdf3;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      font-size: 13px;
+    }
+
+    .footer {
+      margin-top: 16px;
+      font-size: 12px;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .main {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="top">
+      <div>
+        <div class="brand">音脉 Studio 支付中心</div>
+        <div class="sub">用于会员订阅与音频转谱服务费用支付</div>
+      </div>
+      <div class="sub">商户名称：成都音脉科技</div>
+    </div>
+
+    <div class="main">
+      <section class="card">
+        <h2>订单信息</h2>
+
+        <div class="section">
+          <div class="item">
+            <span class="k">订单号</span>
+            <span id="orderNo">YM202604220001</span>
+          </div>
+          <div class="item">
+            <span class="k">下单时间</span>
+            <span id="orderTime">2026-04-22 20:00:00</span>
+          </div>
+          <div class="item">
+            <span class="k">购买账号</span>
+            <span>demo_user@yinmai.ai</span>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="item">
+            <span class="k">商品名称</span>
+            <span>音脉 Studio 创作者版（月付）</span>
+          </div>
+          <div class="item">
+            <span class="k">服务周期</span>
+            <span>1 个月</span>
+          </div>
+          <div class="item">
+            <span class="k">服务内容</span>
+            <span>音频转谱 / MIDI 导出 / MusicXML 导出 / 任务优先处理</span>
+          </div>
+          <div>
+            <span class="tag">虚拟服务</span>
+            <span class="tag">自动续费可关闭</span>
+            <span class="tag">开通即生效</span>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="item">
+            <span class="k">商品金额</span>
+            <span>¥39.00</span>
+          </div>
+          <div class="item">
+            <span class="k">优惠金额</span>
+            <span>-¥0.00</span>
+          </div>
+          <div class="item">
+            <span class="k">应付总额</span>
+            <span class="price">¥39.00<small>元</small></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>支付方式</h2>
+
+        <div class="pay-methods">
+          <label class="method active">
+            <div>
+              <div>支付宝</div>
+              <div class="sub">推荐 · 支持花呗/余额/银行卡</div>
+            </div>
+            <span class="dot"></span>
+          </label>
+          <label class="method">
+            <div>
+              <div>微信支付（预留）</div>
+              <div class="sub">后续开放</div>
+            </div>
+          </label>
+        </div>
+
+        <button class="btn" id="payBtn">确认支付</button>
+
+        <p class="agree">
+          点击“确认支付”即表示你已阅读并同意
+          <a href="#user-agreement">《用户服务协议》</a>、
+          <a href="#privacy-policy">《隐私政策》</a>、
+          <a href="#refund-policy">《退款说明》</a>
+        </p>
+
+        <div class="ok">
+          审核演示说明：本页用于展示支付流程、订单信息展示与条款告知结构，支付按钮可替换为正式支付宝下单逻辑。
+        </div>
+
+        <div class="notice">
+          <strong>客服与售后</strong>
+          <ul>
+            <li>客服邮箱：help@yinmai.ai</li>
+            <li>客服电话：400-800-1234（工作日 9:30 - 18:30）</li>
+            <li>问题受理范围：支付异常、开通失败、发票申请、退款咨询</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <section class="card" style="margin-top: 18px;">
+      <h2 id="refund-policy">退款说明（审核必备）</h2>
+      <div class="sub" style="margin-bottom: 8px;">虚拟服务支付后即时开通，默认不支持无理由退款，以下场景可申请退款：</div>
+      <ul style="margin-left: 18px; font-size: 14px; color: #374151;">
+        <li>重复扣款或异常扣款，经核实后原路退回。</li>
+        <li>系统故障导致服务在 24 小时内无法开通，可全额退款。</li>
+        <li>如因账号违规、政策限制导致服务中止，不在退款范围内。</li>
+      </ul>
+    </section>
+
+    <section class="card" style="margin-top: 18px;">
+      <h2 id="user-agreement">用户服务协议（摘要）</h2>
+      <div style="font-size: 14px; color: #374151;">
+        用户购买后可在服务周期内使用对应功能额度；不得用于违法违规内容生成；平台可依据风控规则对异常请求进行限制。
+      </div>
+    </section>
+
+    <section class="card" style="margin-top: 18px;">
+      <h2 id="privacy-policy">隐私政策（摘要）</h2>
+      <div style="font-size: 14px; color: #374151;">
+        平台仅在提供服务必要范围内处理账号信息与上传文件，支付过程由第三方支付机构完成。用户可通过客服渠道申请数据导出或删除。
+      </div>
+    </section>
+
+    <div class="footer">
+      © 2026 深圳音脉科技有限公司 | 粤ICP备00000000号-1 | 支付场景审核演示页
+    </div>
+  </div>
+
+  <script>
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, "0");
+    const d = String(now.getDate()).padStart(2, "0");
+    const hh = String(now.getHours()).padStart(2, "0");
+    const mm = String(now.getMinutes()).padStart(2, "0");
+    const ss = String(now.getSeconds()).padStart(2, "0");
+
+    const orderNo = "YM" + y + m + d + String(Math.floor(Math.random() * 900000 + 100000));
+    document.getElementById("orderNo").textContent = orderNo;
+    document.getElementById("orderTime").textContent = `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
+
+    document.getElementById("payBtn").addEventListener("click", () => {
+      alert("演示页面：此处可接入支付宝下单接口（如统一下单/收银台唤起）。");
+    });
+  </script>
+</body>
+</html>

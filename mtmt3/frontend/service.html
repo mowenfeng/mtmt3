@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>商品与服务说明 - 音脉 Studio</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #fff;
+      --text: #111827;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #1677ff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      line-height: 1.6;
+    }
+    .wrap { width: min(1040px, 92%); margin: 28px auto 56px; }
+    .hero {
+      background: linear-gradient(135deg, #eef4ff 0%, #f6f0ff 100%);
+      border: 1px solid #dbe6ff;
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .title { font-size: 30px; font-weight: 800; margin-bottom: 8px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 16px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px;
+    }
+    h2 { font-size: 20px; margin-bottom: 12px; }
+    .line { height: 1px; background: var(--line); margin: 12px 0; }
+    .item { display: flex; justify-content: space-between; gap: 12px; margin: 8px 0; font-size: 14px; }
+    .k { color: var(--muted); }
+    .price { color: #cf1322; font-size: 34px; font-weight: 800; line-height: 1.2; margin: 4px 0; }
+    .price small { font-size: 14px; color: var(--muted); font-weight: 500; margin-left: 4px; }
+    ul { margin-left: 18px; }
+    li { margin: 4px 0; font-size: 14px; }
+    .tags { margin-top: 8px; }
+    .tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #edf3ff;
+      color: #0f5bd8;
+      font-size: 12px;
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 10px;
+      background: var(--primary);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .small { font-size: 13px; color: var(--muted); }
+    .foot {
+      margin-top: 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px 20px;
+      font-size: 13px;
+      color: #374151;
+    }
+    @media (max-width: 880px) {
+      .grid { grid-template-columns: 1fr; }
+      .title { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="title">音脉 Studio 创作者版（月付）</div>
+      <div class="sub">商户名称：成都音脉科技 | 商品类型：虚拟软件服务 | 用途：AI 音乐转谱与导出</div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>商品/服务详情</h2>
+        <div class="item"><span class="k">商品名称</span><span>音脉 Studio 创作者版（月付）</span></div>
+        <div class="item"><span class="k">服务周期</span><span>1 个月（开通即生效）</span></div>
+        <div class="item"><span class="k">适用对象</span><span>音乐创作者、音乐学生、编曲工作者</span></div>
+        <div class="line"></div>
+        <h2 style="font-size:18px;">包含功能</h2>
+        <ul>
+          <li>音频转 MIDI（支持常见音频格式）</li>
+          <li>MIDI 转 MusicXML 导出</li>
+          <li>人声与伴奏分离（基础版）</li>
+          <li>转谱任务优先排队与历史记录查询</li>
+        </ul>
+        <div class="tags">
+          <span class="tag">在线服务</span>
+          <span class="tag">自动开通</span>
+          <span class="tag">可开发票</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>价格与支付说明</h2>
+        <div class="item"><span class="k">标准价格</span><span>¥39.00 / 月</span></div>
+        <div class="item"><span class="k">优惠后</span><span>¥39.00</span></div>
+        <div class="price">¥39.00<small>元</small></div>
+        <div class="small">支付方式：支付宝（支持余额、银行卡、花呗）</div>
+        <a class="btn" href="/payment.html">去支付页面</a>
+        <div class="line"></div>
+        <div class="small">付款后立即开通对应服务权限，订单可在“我的订单”中查询。</div>
+      </article>
+    </section>
+
+    <section class="grid" style="margin-top:16px;">
+      <article class="card">
+        <h2>退款与售后说明</h2>
+        <ul>
+          <li>虚拟服务开通后默认不支持无理由退款。</li>
+          <li>重复扣款、异常扣款可原路退款。</li>
+          <li>系统故障导致 24 小时内无法使用，可申请全额退款。</li>
+          <li>客服邮箱：help@yinmai.ai，客服电话：400-800-1234。</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h2>审核信息补充</h2>
+        <div class="item"><span class="k">商户名称</span><span>成都音脉科技</span></div>
+        <div class="item"><span class="k">服务形态</span><span>网站在线付费会员服务</span></div>
+        <div class="item"><span class="k">交付方式</span><span>系统自动开通账号权益</span></div>
+        <div class="item"><span class="k">协议入口</span><span>支付页内展示并可访问</span></div>
+      </article>
+    </section>
+
+    <div class="foot">
+      页面用途：支付宝审核材料截图（商品/服务展示页）。建议与支付页截图一起提交，路径分别为
+      <strong>/service.html</strong> 与 <strong>/payment.html</strong>。
+    </div>
+  </div>
+</body>
+</html>
