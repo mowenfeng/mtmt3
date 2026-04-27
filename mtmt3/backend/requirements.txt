@@ -13,3 +13,4 @@ mido
 music21
 mt3-infer
 transformers<4.50
+requests

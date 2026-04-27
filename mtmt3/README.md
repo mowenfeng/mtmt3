@@ -57,6 +57,22 @@ start_worker.bat
 python -m backend.worker
 ```
 
+#### 方式三：云端轻服务 + 本地GPU远程Worker
+
+适用于云端不带GPU、本地机器有GPU的场景：
+
+1. 云端仅启动 API（不要启动 `backend.worker`）  
+2. 本地 GPU 机器运行远程 Worker，主动从云端拉任务并回传结果
+
+```bash
+# 本地 GPU 机器
+export REMOTE_API_BASE=http://<你的云端地址>
+export WORKER_TOKEN=<与云端一致的令牌>
+python -m backend.remote_worker
+```
+
+云端需设置同一个 `WORKER_TOKEN` 环境变量，用于远程 Worker 鉴权。
+
 ### 3. 访问服务
 
 启动服务后，在浏览器中访问：
